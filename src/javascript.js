@@ -3,7 +3,11 @@
 function displayCity(event) {
   event.preventDefault();
   let search = document.querySelector("#searchBar");
-  let searchedCity = search.value;
+  let searchedCity = "Atlanta";
+  if (search.value !== "") {
+    searchedCity = search.value;
+  }
+  console.log(searchedCity);
   searchedCity = searchedCity.toLowerCase().trim();
   let unit = getUnit();
   let key = "326468886cdb97f0a6e01a8cc558a9e3";
@@ -126,6 +130,7 @@ function changeTime(timestamp, offset) {
 /****everything else ****/
 let now = new Date();
 changeTime(now, 0);
+document.addEventListener("DOMContentLoaded", displayCity);
 
 let searchButton = document.querySelector("#searchForm");
 searchButton.addEventListener("submit", displayCity);
