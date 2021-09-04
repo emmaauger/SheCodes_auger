@@ -7,17 +7,19 @@ function displayCity(event) {
   if (search.value !== "") {
     searchedCity = search.value;
   }
-  console.log(searchedCity);
+ 
   searchedCity = searchedCity.toLowerCase().trim();
-  let unit = getUnit();
+  let unit = "imperial";
   let key = "326468886cdb97f0a6e01a8cc558a9e3";
   let url = `https://api.openweathermap.org/data/2.5/weather?q=${searchedCity}&appid=${key}&units=${unit}`;
+  
   axios.get(url).then(getCurrTemp);
+ 
 }
 function handlePosition(position) {
   let latitude = position.coords.latitude;
   let longitude = position.coords.longitude;
-  unit = getUnit();
+  let unit = "imperial";
   let key = "326468886cdb97f0a6e01a8cc558a9e3";
   let url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}&units=${unit}`;
   axios.get(url).then(getCurrTemp);
@@ -32,59 +34,29 @@ function getCurrTemp(response) {
   let locations = document.querySelector("#location");
   locations.innerHTML = city;
   changeDescription(response.data);
+  getForecast(response.data.coord);
+}
+function getForecast(coordinates){
+  console.log(coordinates);
+  let key = "326468886cdb97f0a6e01a8cc558a9e3";
+  let unit = "imperial"
+  let forecastURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${key}&units=${unit}`
+  axios.get(forecastURL).then(displayForecast);
 }
 function changeCurrentLoc(event) {
   event.preventDefault();
   navigator.geolocation.getCurrentPosition(handlePosition);
 }
-function celsiusToFarhrenheit(tempC) {
-  let tempF = (tempC * 9) / 5 + 32;
-  tempF = Math.round(tempF);
-  return tempF;
-}
-function farhrenheitToCelsius(tempF) {
-  let tempC = ((tempF - 32) * 5) / 9;
-  tempC = Math.round(tempC);
-  return tempC;
-}
-function changeUnits(event) {
-  event.preventDefault();
-  let otherUnit = document.querySelector("#otherUnit");
-  let mainUnit = document.querySelector("#mainUnit");
-  let temp = document.querySelector("#currentTemp");
-  let newUnit = otherUnit.innerHTML;
-  let oldUnit = mainUnit.innerHTML;
-  let currTemp = temp.innerHTML;
-  if (newUnit === "°C") {
-    currTemp = farhrenheitToCelsius(currTemp);
-    newUnit = "°C";
-    oldUnit = "°F";
-  } else {
-    currTemp = celsiusToFarhrenheit(currTemp);
-    newUnit = "°F";
-    oldUnit = "°C";
-  }
 
-  otherUnit.innerHTML = oldUnit;
-  mainUnit.innerHTML = newUnit;
-  temp.innerHTML = currTemp;
-}
-function getUnit() {
-  let mainUnit = document.querySelector("#mainUnit");
-  if (mainUnit.innerHTML === "°C") {
-    unit = "metric";
-  } else {
-    unit = "imperial";
-  }
-  return unit;
-}
+
+
 function changeDescription (weather) {
   let currentDescription = document.querySelector("h1");
   currentDescription.innerHTML = weather.weather[0].main;
   let icon = weather.weather[0].icon;
   let iconElement = document.querySelector("#icon");
   let iconAddress =`http://openweathermap.org/img/wn/${icon}@2x.png`;
-  console.log(iconAddress);
+
   iconElement.setAttribute("src",iconAddress);
   let humidity = document.querySelector("#humidity");
   let wind = document.querySelector("#windSpeed");
@@ -119,7 +91,7 @@ function changeTime(timestamp, offset) {
     "Saturday",
   ];
   let day = days[date.getDay()];
-  console.log(date.getDay());
+ 
   let dayOrNight = "";
   if (hour > 11) {
     dayOrNight = "pm";
@@ -129,17 +101,64 @@ function changeTime(timestamp, offset) {
   } else {
     dayOrNight = "am";
   }
-  console.log(day);
-  console.log(hour);
+ 
   let formattedDate = `${day} ${hour}:${minutes} ${dayOrNight}`;
-  console.log(formattedDate);
+ 
   dayTime.innerHTML = formattedDate;
 }
+function formatDay(timestamp){
+  let date = new Date(timestamp*1000);
+  let day = date.getDay();
+  let days = [
+    "Sun",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+  ];
+  return days[day];
+}
+function displayForecast(response) {
+  console.log(response.data.daily);
+  let daily = response.data.daily.slice(0,5);
+  
+  let forecastElement = document.querySelector("#forecast");
+  let forecastHTML = `<div class="week">`;
+  
+  daily.forEach(function(day,i){
+    
+    let icon = day.weather[0].icon;
+    
+    unit = "F"
+    
+    
+    forecastHTML = forecastHTML + `
+      <span class="card" >
+        <img src="http://openweathermap.org/img/wn/${icon}@2x.png" class="weatherIcons" width="50px" id = "icon"/>
+            <h5 class="card-title">${formatDay(day.dt)}</h5>
+              <p class="card-text">
+                ${day.weather[0].main} <br />
+                <strong>${Math.round(day.temp.max)}°${unit}/${Math.round(day.temp.min)}°${unit}</strong>
+              </p>
+      </span>`;
+  })
+  
+    
+
+  forecastHTML = forecastHTML +  `</div>`;
+  forecastElement.innerHTML = forecastHTML;
+}
+
+
+
 
 /****everything else ****/
 let now = new Date();
 changeTime(now, 0);
 document.addEventListener("DOMContentLoaded", displayCity);
+
 
 let searchButton = document.querySelector("#searchForm");
 searchButton.addEventListener("submit", displayCity);
