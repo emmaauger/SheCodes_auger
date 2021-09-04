@@ -1,5 +1,5 @@
 body {
-  text-align: center;
+  
   margin: 0% auto;
   background: #ffff;
   margin-top: 5px;
@@ -9,7 +9,7 @@ body {
 .content {
   max-width: 75%;
   min-width: 650px;
-  text-align: center;
+  text-align: left;
   margin: 0% auto;
   padding: 18px;
   border-radius: 4px;
@@ -23,7 +23,7 @@ form {
 h1 {
   text-align: center;
   margin: 0px;
-  padding: 0px 10px 10px;
+  padding: 15px 20px 0px;
   color: rgb(29, 36, 44);
   font-size: 50px;
   border-radius: 4px;
@@ -31,7 +31,7 @@ h1 {
 h2 {
   text-align: center;
   margin: 0px;
-  padding: 10px 0px 0px;
+  padding: 10px 20px 0px;
   color: rgb(29, 36, 44);
   font-size: 40px;
   border-radius: 4px;
@@ -41,17 +41,22 @@ h3 {
   font-size: 25px;
   background: #ffff;
   display: block;
-  padding: 20px;
+  padding: 10px;
   border-radius: 4px;
   color: rgb(50, 63, 77);
   margin-top: 12px;
   border: 2px solid rgb(211, 198, 24);
 }
 h4 {
-  padding: 0px;
+  text-align: center;
+  padding: 0px 20px;
   margin: 0px;
   font-size: 18px;
-  color: #212529bb;
+  color: rgb(50, 63, 77);
+}
+h5 {
+  font-size: 18px;
+  color:rgba(50, 63, 77, 0.705);
 }
 #currentLocButton {
   font-size: 16px;
@@ -66,7 +71,16 @@ h4 {
   bottom: 18px;
   right: 5px;
 }
-
+.topImage {
+  color: yellow;
+  padding: 1px;
+  border-radius: 50%;
+  height: 80px;
+  border: 0px solid rgb(211, 198, 24);
+  margin: 0px 0px 10px 0px;
+ 
+  
+}
 .overview {
   display: block;
   background-color: #ffff;
@@ -76,14 +90,7 @@ h4 {
   border: 2px solid rgb(211, 198, 24);
   text-align: center;
 }
-.topImage {
-  padding: 1px;
-  border-radius: 50%;
-  height: 200px;
-  border: 1px solid rgb(211, 198, 24);
-  margin: 10px 0px 0px 0px;
-  background: #ffff;
-}
+
 .week {
   margin: 0% auto;
   margin-top: 12px;

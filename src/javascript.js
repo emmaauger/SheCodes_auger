@@ -31,6 +31,7 @@ function getCurrTemp(response) {
   currentTemp.innerHTML = temperature;
   let locations = document.querySelector("#location");
   locations.innerHTML = city;
+  changeDescription(response.data);
 }
 function changeCurrentLoc(event) {
   event.preventDefault();
@@ -77,21 +78,29 @@ function getUnit() {
   }
   return unit;
 }
+function changeDescription (weather) {
+  let currentDescription = document.querySelector("h1");
+  currentDescription.innerHTML = weather.weather[0].main;
+  let icon = weather.weather[0].icon;
+  let iconElement = document.querySelector("#icon");
+  let iconAddress =`http://openweathermap.org/img/wn/${icon}@2x.png`;
+  console.log(iconAddress);
+  iconElement.setAttribute("src",iconAddress);
+  let humidity = document.querySelector("#humidity");
+  let wind = document.querySelector("#windSpeed");
+  wind.innerHTML=weather.wind.speed;
+  humidity.innerHTML=weather.main.humidity;
+}
 function changeTime(timestamp, offset) {
   let dayTime = document.querySelector("div#date");
   let date = 0;
-  console.log(timestamp);
   if (offset === 0) {
     date = new Date(timestamp);
   } else {
     let now = new Date();
     let localOffset = -now.getTimezoneOffset();
     let offsetFinal = (offset / 3600 - localOffset / 60) * 3600;
-    console.log(offset);
-    console.log(localOffset);
-    console.log(offsetFinal);
     date = new Date((timestamp + offsetFinal) * 1000);
-    console.log(date);
   }
 
   let hour = date.getHours();
